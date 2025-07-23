@@ -1,0 +1,21 @@
+import React from 'react'
+import CreatePollForm from './CreatePollForm'
+
+const CreatePollModal = ({setIsModalOpen}) => {
+
+  return (
+    <dialog id="my_modal_1" className="modal modal-open">
+      <div className="modal-box w-11/12 max-w-6xl p-6 rounded-2xl shadow-xl h-[675px]">
+        <form method="dialog">
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={()=> setIsModalOpen(false)}>✕</button>
+        </form>
+        <CreatePollForm setIsModalOpen={setIsModalOpen}/>
+      </div>
+      <form method="dialog" className="modal-backdrop">
+        <button onClick={()=> setIsModalOpen(false)}>close</button>
+      </form>
+    </dialog>
+  )
+}
+
+export default CreatePollModal
