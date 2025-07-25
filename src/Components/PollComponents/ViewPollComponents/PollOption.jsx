@@ -3,126 +3,142 @@ import ViewRestaurantDetails from './ViewRestaurantDetails';
 import ViewPollVoters from './ViewPollVoters';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../../Context/AuthContext';
-import { useMultiWebSocket } from '../../../Context/MultiWebSocketContext';
+// import { useMultiWebSocket } from '../../../Context/MultiWebSocketContext';
+import usePollStore from '../../../store/usePollStore';
+import { useWebSocket } from '../../../Context/WebSocketContext'
 
-const PollOption = ({ id, allowMultipleVotes = false, count, option, setSelected, selected ,sendMessage}) => {
+const PollOption = ({ pollId, optionId,ended = false, count }) => {
+  const { updateVote } = usePollStore();
+  const { user } = useContext(AuthContext);
+  const { messages, sendMessage, connected} = useWebSocket();
+  
+  // Get the specific option and poll from store
+  const option = usePollStore((state) =>
+    state.polls
+      .find((p) => p.id === pollId)
+      ?.options.find((o) => o.id === optionId)
+  );
+  
+  const poll = usePollStore((state) =>
+    state.polls.find((p) => p.id === pollId)
+  );
+
   const [isVotersModalOpen, setIsVotersModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
-  const {user} = useContext(AuthContext)
-   const {
-    sendMessage1,
-    messageHistory1,
-    isConnected1,
-    sendMessage2,
-    messageHistory2,
-    isConnected2
-  } = useMultiWebSocket();
 
-   const submitVote = (obj) => {
-    if (isConnected1) {
-      sendMessage1(obj);
-    }
-  };
+  // Early return if option or poll not found
+  if (!option || !poll) {
+    return <div>Option not found</div>;
+  }
 
-  const { title, Details, voters } = option;
+  const allowMultipleVotes = poll.allowMultipleVotes;
+
+  // Calculate if this option is selected - ADD NULL CHECKS FOR VOTERS
+let selected = false;
+
+if (user) {
+  if (allowMultipleVotes) {
+    selected = (option.voters || []).some((v) => v.id === user.id);
+  } else {
+    const selectedOption = poll.options.find((o) =>
+      (o.voters || []).some((v) => v.id === user.id)
+    );
+    selected = selectedOption?.id === option.id;
+  }
+}
+
+
+
+
+  const { title, Details, voters = [] } = option; // Default voters to empty array
   const ratio = count === 0 ? 0 : (voters.length / count) * 100;
 
-  console.log(voters)
-
-  // Check if this option is currently selected
-  const isSelected = allowMultipleVotes 
-    ? (selected || []).includes(option.id)
-    : selected === option.id;
-
-  const handleSelectionChange = (e) => {
+  const handleVote = () => {
+    console.log("test")
     if (allowMultipleVotes) {
-      // Multi-select logic (checkbox)
-       if (selected.includes(option.id)) {
-        submitVote(JSON.stringify({
+      if (connected) {
+         console.log("after connect")
+      sendMessage('/app/vote',{
           userId: user.id,
-          type: "vote",
-          voteAction: "remove",
           pollOptionId: option.id,
+          voteAction: selected ? "remove" : "add",
           previousOptionId: null
-        }))} else {
-          submitVote(JSON.stringify({
-          userId: user.id,
-          type: "vote",
-          voteAction: "add",
-          pollOptionId: option.id,
-          previousOptionId: null
-        }))
-        }
-      
+        });
 
-
-      setSelected((prev) =>
-        e.target.checked
-          ? [...(prev || []), option.id] 
-          : (prev || []).filter((id) => id !== option.id) 
-      );
-      
+        console.log("after send")
+    
+      updateVote({
+        userId: user.id,
+        pollOptionId: option.id,
+        voteAction: selected ? "remove" : "add",
+      });
+    }
     } else {
-      // Single-select logic (radio with deselection)
-      if (selected === option.id) {
-        submitVote(JSON.stringify({
-          userId: user.id,
-          type: "vote",
-          voteAction: "remove",
-          pollOptionId: option.id,
-          previousOptionId: null
-    }))
+      if (selected) {
+        if (connected) {
+          sendMessage('/app/vote',{
+              userId: user.id,
+              pollOptionId: option.id,
+              voteAction: "remove",
+              previousOptionId: null
+          });
         
-        setSelected(null);
-      } else {
-        if(selected === null) {
-          submitVote(JSON.stringify({
-          userId: user.id,
-          type: "vote",
-          voteAction: "add",
-          pollOptionId: option.id,
-          previousOptionId: null
-      }))
-        } else{
-          submitVote(JSON.stringify({
-          userId: user.id,
-          type: "vote",
-          voteAction: "update",
-          pollOptionId: option.id,
-          previousOptionId: selected
-    }))
+          updateVote({
+            userId: user.id,
+            pollOptionId: option.id,
+            voteAction: "remove",
+          });
         }
-        setSelected(option.id);
+      } else {
+        // If not selected, update vote (remove from previous, add to current)
+        const previousOption = poll.options.find((o) =>
+          (o.voters || []).some((v) => v.id === user.id) // Add null check here too
+        );
+        if (connected) {
+          sendMessage('/app/vote', previousOption ? {
+              userId: user.id,
+              pollOptionId: option.id,
+              voteAction: "update",
+  
+              previousOptionId: previousOption?.id,
+          }: {
+              userId: user.id,
+              pollOptionId: option.id,
+              voteAction: "add",
+       
+              previousOptionId: null,
+          });
+          
+        
+          updateVote( previousOption ? {
+            userId: user.id,
+            pollOptionId: option.id,
+            voteAction: "update",
+            previousOptionId: previousOption?.id ,
+          }: {
+              userId: user.id,
+              pollOptionId: option.id,
+              voteAction: "add",
+              previousOptionId: null,
+          });
+        }
       }
     }
   };
-
-
 
   return (
     <div>
       <label className="input input-primary cursor-pointer flex flex-col items-start justify-start h-20 w-full">
         <div className="flex gap-2 mt-2 h-5 w-full">
-         <input
-  className={`${allowMultipleVotes ? 'checkbox' : 'radio'} ${allowMultipleVotes ? 'checkbox-primary' : 'radio-primary'} h-4 w-4 mt-1`}
-  type={allowMultipleVotes ? 'checkbox' : 'radio'}
-  name={allowMultipleVotes ? `poll-multi-${option.id}` : 'poll'}
-  value={option.id}
-  checked={isSelected}
-  onClick={(e) => {
-    // 👇 Custom logic to allow radio deselection
-    if (!allowMultipleVotes && selected === option.id) {
-      e.preventDefault(); // prevent default radio behavior
-      handleSelectionChange(e); // call custom handler to deselect
-    }
-  }}
-  onChange={(e) => {
-    // Only trigger change if it's a new selection
-    if (allowMultipleVotes || selected !== option.id) {
-      handleSelectionChange(e);
-    }
-  }}
-/>
+          <input
+            className={`${allowMultipleVotes ? 'checkbox' : 'radio'} ${allowMultipleVotes ? 'checkbox-primary' : 'radio-primary'} h-4 w-4 mt-1`}
+            type={allowMultipleVotes ? 'checkbox' : 'radio'}
+            name={allowMultipleVotes ? `poll-multi-${option.id}` : `poll-${pollId}`}
+            value={option.id}
+            defaultChecked={selected}
+            onChange={allowMultipleVotes ? handleVote : undefined}
+            onClick={allowMultipleVotes ? undefined : handleVote}
+          />
 
           <div className="mt-[1.2px]">{title}</div>
           <button

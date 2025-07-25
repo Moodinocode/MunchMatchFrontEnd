@@ -7,10 +7,9 @@ import RegistrationPage from "./Pages/RegistrationPage";
 import RestaurantPage from "./Pages/RestaurantPage";
 import PollsPage from "./Pages/PollsPage";
 import { AuthProvider } from "./Context/AuthContext";
-import { MultiWebSocketProvider } from "./Context/MultiWebSocketContext";
 import SettingsPage from "./Pages/SettingsPage";
-//import WebSocketDemo from "./Pages/websocket";
-
+import { WebSocketProvider } from './Context/WebSocketContext';
+import { ToastContainer } from 'react-toastify';
 const msalInstance = new PublicClientApplication(msalConfig);
 
 function App() {
@@ -23,7 +22,6 @@ function App() {
         <Route path="/polls" element={<PollsPage />} />
         <Route path="/mypolls" element={<PollsPage />} />
         <Route path="/settings" element={<SettingsPage />} />
-        {/* <Route path="/web" element={<WebSocketDemo />} /> */}
       </Route>
     )
   );
@@ -31,9 +29,22 @@ function App() {
   return (
     <MsalProvider instance={msalInstance}>
       <AuthProvider>
-        <MultiWebSocketProvider>
+        <WebSocketProvider>
           <RouterProvider router={router} />
-        </MultiWebSocketProvider>
+            <ToastContainer
+              position="bottom-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick={false}
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="colored"
+            // transition={Bounce}
+            />
+        </WebSocketProvider>
       </AuthProvider>
     </MsalProvider>
   );

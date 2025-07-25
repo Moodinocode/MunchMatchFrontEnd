@@ -2,10 +2,18 @@ import { useState,useEffect} from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { logout } from '../Services/authService'
 import ThemeToggle from './ThemeToggle'
-import { Bell } from 'lucide-react';
 import NotificationDropDown from './NotificationDropDown';
+import useNotificationStore from '../store/useNotificationStore'
+
+
 
 const Navbar = () => {
+  const {notifications, loading,error, fetchNotifications} = useNotificationStore();
+
+  useEffect(()=> {
+    fetchNotifications(sessionStorage.getItem("token"))
+  },[])
+
   const [isDark, setIsDark] = useState(() => {
     return document.documentElement.getAttribute("data-theme") === "dark"
   });
@@ -13,6 +21,7 @@ const Navbar = () => {
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
   }, [isDark]);
+
 
   const toggleTheme = () => {
     setIsDark(prev => !prev);
@@ -61,7 +70,7 @@ const Navbar = () => {
   </div>
   <div className='w-2/5'></div>
   <div className='flex justify-center items-center'>
-    <NotificationDropDown/>
+    <NotificationDropDown notifications={notifications}/>
 
 
 <div className="dropdown dropdown-end lg:mr-8">
