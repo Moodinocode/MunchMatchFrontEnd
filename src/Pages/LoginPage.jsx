@@ -21,7 +21,7 @@ const LoginPage = () => {
     // console.log('Password:', userDetails.password);
     login(userDetails).then((response)=>{
       const { token, ...userData } = response.data;
-      sessionStorage.setItem("token", `Bearer ${token}`);
+      sessionStorage.setItem("token", `${token}`);
       sessionStorage.setItem("user", JSON.stringify(userData));
 
       navigate('/')

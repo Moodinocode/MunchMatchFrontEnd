@@ -1,19 +1,7 @@
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
-const apiUrl = import.meta.env.VITE_API_URL+'/notification';
+const apiUrl ='/notification';
 
-export const getNotifications = (token) => axios.get(apiUrl,{
-    headers: {
-        Authorization: token,
-         'ngrok-skip-browser-warning': 'true'
-    }
-})
+export const getNotifications = () => axiosInstance.get(apiUrl)
 
-
-
-export const checkNotifications = (token) => axios.patch(apiUrl,{},{
-    headers: {
-        Authorization: token,
-         'ngrok-skip-browser-warning': 'true'
-    }
-})
+export const checkNotifications = () => axiosInstance.patch(apiUrl,{})

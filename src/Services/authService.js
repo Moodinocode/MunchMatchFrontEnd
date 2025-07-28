@@ -1,18 +1,12 @@
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
-const apiUrl = import.meta.env.VITE_API_URL+'/auth';
-
-
+const apiUrl ='/auth';
 
 // export const login = ({UserDetails}) => axios.post(apiUrl+"/login",UserDetails)
-export const login = (UserDetails) => axios.post(apiUrl+"/login",UserDetails)
+export const login = (requestBody) => axiosInstance.post(apiUrl+"/login",requestBody)
 
-export const signup = (UserDetails) => axios.post(apiUrl+"/register",UserDetails)
+export const signup = (requestBody) => axiosInstance.post(apiUrl+"/register",requestBody)
 
-export const logout = (token) => axios.post(apiUrl+"/logout",{},{
-    headers: {
-        Authorization: token
-    }
-})
+export const logout = () => axiosInstance.post(apiUrl+"/logout",{})
 
-export const OauthLogin = () => axios.post(apiUrl)
+export const OauthLogin = () => axiosInstance.post(apiUrl)

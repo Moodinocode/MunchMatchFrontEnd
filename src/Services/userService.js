@@ -1,24 +1,12 @@
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
-const apiUrl = import.meta.env.VITE_API_URL+'/user';
+const apiUrl = '/user';
 
-export const getAllUsers = (token) => axios.get(apiUrl,
-    {
-        headers: {
-            Authorization: token,
-            'ngrok-skip-browser-warning': 'true'
-        }
-    }
-    
-)
+export const getAllUsers = () => axiosInstance.get(apiUrl)
 
 
-export const signup = (UserDetails) => axios.post(apiUrl+"/register",UserDetails)
+export const signup = (UserDetails) => axiosInstance.post(apiUrl+"/register",UserDetails)
 
-export const logout = (token) => axios.post(apiUrl+"/logout",{},{
-    headers: {
-        Authorization: token
-    }
-})
+export const logout = () => axiosInstance.post(apiUrl+"/logout",{})
 
 export const OauthLogin = () => axios.post(apiUrl)

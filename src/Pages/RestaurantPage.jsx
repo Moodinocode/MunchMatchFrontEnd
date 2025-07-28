@@ -11,7 +11,7 @@ const RestaurantPage = () => {
   const [options,setOptions] = useState([])
 
   useEffect(()=>{
-    getOptions(sessionStorage.getItem("token")).then(response => setOptions(response.data)).catch(error => console.log(error))
+    getOptions().then(response => setOptions(response.data)).catch(error => console.log(error))
   },[])
 
   return (

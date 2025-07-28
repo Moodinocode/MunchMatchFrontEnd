@@ -26,7 +26,7 @@ export const WebSocketProvider = ({ children }) => {
     const clientRef = useRef(null);
     const [connected, setConnected] = useState(false);
     const [messages, setMessages] = useState([]);
-    const {handleVoteChange} = usePollStore();
+    const {handleVoteChange, addPoll} = usePollStore();
     const {addNotification} = useNotificationStore()
     const {user} = useContext(AuthContext)
 
@@ -43,7 +43,13 @@ export const WebSocketProvider = ({ children }) => {
         console.log("connected")
         client.subscribe('/topic/vote', (message) => {
           const body = JSON.parse(message.body);
+          console.log(body)
           handleVoteChange(body)
+          setMessages((prev) => [...prev, body.content]);
+        });
+        client.subscribe(`/topic/poll/${user.id}`, (message) => {
+          const body = JSON.parse(message.body);
+          addPoll(body)
           setMessages((prev) => [...prev, body.content]);
         });
         client.subscribe('/topic/notification', (message) => {

@@ -25,7 +25,7 @@ const AddRestaurantForm = () => {
                   (e) => {
                     e.preventDefault();
                     console.log(option)
-                    createOption(sessionStorage.getItem("token"),option).then(response => console.log(response)).catch(error => console.log(error)
+                    createOption(option).then(response => console.log(response)).catch(error => console.log(error)
                     )
                   }
                 } className="btn btn-success w-full mt-6 shadow-md hover:scale-105 transition-transform duration-200">

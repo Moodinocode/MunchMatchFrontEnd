@@ -11,7 +11,7 @@ const Navbar = () => {
   const {notifications, loading,error, fetchNotifications} = useNotificationStore();
 
   useEffect(()=> {
-    fetchNotifications(sessionStorage.getItem("token"))
+    fetchNotifications()
   },[])
 
   const [isDark, setIsDark] = useState(() => {
@@ -96,9 +96,8 @@ const Navbar = () => {
     <Link
       to='/login'
       onClick={(e) => {
-        const token = sessionStorage.getItem("token")
         sessionStorage.clear()
-        logout(token).then((response) => {
+        logout().then((response) => {
           console.log(response.data)
         }).catch(error => console.log(error))
       }}

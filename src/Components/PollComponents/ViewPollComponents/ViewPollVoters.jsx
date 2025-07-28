@@ -1,7 +1,6 @@
 import React from 'react'
 
-const ViewPollVoters = ({voters = [], isOpen =false,setIsVotersModalOpen}) => {
-  // const {id,name,email,profileImageLink} = Voters
+const ViewPollVoters = ({voters = [],title, isOpen =false,setIsVotersModalOpen}) => {
   
 
   return (
@@ -12,9 +11,8 @@ const ViewPollVoters = ({voters = [], isOpen =false,setIsVotersModalOpen}) => {
 
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={() => setIsVotersModalOpen(false)}>✕</button>
         </form>
-         <h1 className='text-xl font-bold pb-2'>Option 1 Voters</h1>
+         <h1 className='text-xl font-bold pb-2'>{title}</h1>
 
-          
           <div className='mt-3'>
             {voters.map(voter => 
 
@@ -23,13 +21,13 @@ const ViewPollVoters = ({voters = [], isOpen =false,setIsVotersModalOpen}) => {
                 {/* <div className="avatar avatar-online"> */}
                 <div className="avatar">
                   <div className="w-8 rounded-full">
-                    <img src={voter.profile_image_url || "https://img.daisyui.com/images/profile/demo/gordon@192.webp"} alt={voter.name} />
+                    <img src={voter.profileImageUrl || "https://img.daisyui.com/images/profile/demo/gordon@192.webp"} alt={voter.name} />
                   </div>
                 </div>
-                <p>{voter.name}</p>
+                <p>{voter.username}</p>
               </div>
               <hr className='text-gray-500 my-2' />
-              </div>
+            </div>
             
             )}
 

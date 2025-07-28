@@ -18,7 +18,7 @@ const PollsPage = () => {
 
 
   useEffect(()=> {
-    fetchPolls(sessionStorage.getItem("token"))
+    fetchPolls()
   },[])
 
 

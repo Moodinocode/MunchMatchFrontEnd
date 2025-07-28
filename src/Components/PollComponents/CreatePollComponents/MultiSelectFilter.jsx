@@ -63,7 +63,7 @@ const MultiSelectFilter = ({ setPollDetails}) => {
   };
 
   useEffect(() => {
-    getOptions(sessionStorage.getItem("token")).then((response) => {
+    getOptions().then((response) => {
       console.log(response)
       setAllOptions(response.data)
     }).catch(error => console.log(error))

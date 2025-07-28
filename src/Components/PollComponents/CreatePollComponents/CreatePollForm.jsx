@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import MultiSelectFilter from './MultiSelectFilter';
 import { createPoll } from '../../../Services/pollsService';
 import UserSelect from './UserSelect';
+import usePollStore from '../../../store/usePollStore';
 
 const CreatePollForm = ({setIsModalOpen}) => {
+  const {polls,addPoll} = usePollStore();
   const [pollDetails, setPollDetails] = useState({
     title: '',
     pollDate: '',
@@ -50,8 +52,8 @@ const CreatePollForm = ({setIsModalOpen}) => {
 
   console.log(finalPayload)
 
-  createPoll(finalPayload, sessionStorage.getItem("token"))
-    .then((response) => console.log(response.data))
+  createPoll(finalPayload)
+    .then((response) => console.log(response, " from http"))
     .catch((error) => console.log(error));
    setIsModalOpen(false)
 };

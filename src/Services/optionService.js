@@ -1,39 +1,18 @@
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
-const apiUrl = import.meta.env.VITE_API_URL+'/option';
+const apiUrl = '/option';
 
-export const getOptions = (token) => axios.get(apiUrl,{
-    headers: {
-        Authorization: token,
-         'ngrok-skip-browser-warning': 'true'
-    }
-})
+export const getOptions = () => axiosInstance.get(apiUrl)
 
-export const createOption = (token,option) => axios.post(apiUrl,option,
-    {
-        headers: {
-            Authorization: token
-        }
-    }
+export const createOption = (requestBody) => axiosInstance.post(apiUrl,requestBody
 )
 
-export const updateOption = (token,option,id) => axios.put(apiUrl+`/${id}`,
+export const updateOption = (requestBody,id) => axiosInstance.put(apiUrl+`/${id}`,
     {
-         option
-    },
-    {
-        headers: {
-            Authorization: token
-        }
+        requestBody
     }
 )
-
-export const deleteOption = (token,optionId) => axios.post(apiUrl+`/${optionId}`,
-    {
-        headers: {
-            Authorization: token
-        }
-    }
+export const deleteOption = (token,optionId) => axiosInstance.post(apiUrl+`/${optionId}`
 )
 
 

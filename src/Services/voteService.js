@@ -1,39 +1,20 @@
-import axios from "axios"
+import axiosInstance from "../utils/axiosInstance";
 
-const apiurl = import.meta.env.VITE_API_URL+'/vote';
+const apiurl = '/vote';
 
-export const setVote = (token,pollOptionId) => axios.post(apiurl+'/vote',
+export const setVote = (pollOptionId) => axiosInstance.post(apiurl+'/vote',
     {
         pollOptionId: pollOptionId
     }
-    ,
-   {
-    headers: {
-        Authorization: token
-    }
-   }
 )
 
-export const updateVote = (token,voteId,pollOptionId) => axios.put(apiurl+`/vote/${voteId}`,
+export const updateVote = (voteId,pollOptionId) => axiosInstance.put(apiurl+`/vote/${voteId}`,
     {
         pollOptionId: pollOptionId,
-    }
-    ,
-   {
-    headers: {
-        Authorization: token
-    }
-   }
-)
+    })
 
 
-export const deleteVote = (token,voteId) => axios.delete(apiurl+`/vote/${voteId}`,
-   {
-    headers: {
-        Authorization: token
-    }
-   }
-)
+export const deleteVote = (voteId) => axiosInstance.delete(apiurl+`/vote/${voteId}`)
 
 
 

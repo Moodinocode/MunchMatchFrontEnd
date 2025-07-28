@@ -6,13 +6,12 @@ const UserSelect = ({ setPollDetails }) => {
   const [selectedOption, setSelectedOption] = useState([]);
   const [userOptions, setUserOptions] = useState([]);
 
-  // Handle dropdown selection changes
+
   const handleChange = (selectedOptions) => {
     setSelectedOption(selectedOptions);
 
     const selectedUserIds = selectedOptions?.map(option => option.value) || [];
-    
-    // Update the parent pollDetails with selected user IDs
+
     setPollDetails(prev => ({
       ...prev,
       visibleUserIds: selectedUserIds,
@@ -20,13 +19,12 @@ const UserSelect = ({ setPollDetails }) => {
   };
 
   useEffect(() => {
-    getAllUsers(sessionStorage.getItem("token"))
+    getAllUsers()
       .then(response => {
         const userData = response.data;
         console.log(response.data)
         console.log(userData)
 
-        // Convert user data to format: { value: id, label: name }
         const options = userData.map(user => ({
           value: user.id,
           label: user.username,

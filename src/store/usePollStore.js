@@ -22,25 +22,24 @@ const usePollStore = create((set, get) => ({
         const { polls } = get(); // Get current state
         
         const updatedPolls = polls.map(poll => {
-            // Check if this poll contains the option we're updating
+            
             const hasOption = poll.options.some(o => o.id === pollOptionId);
             if (!hasOption) return poll;
 
             const newOptions = poll.options.map(option => {
-                // Handle the option being voted on
+               
                 if (option.id === pollOptionId) {
                     let voters = [...option.voters];
                     
                     if (voteAction === "add") {
-                        // Add vote if user hasn't voted on this option
+                        
                         if (!voters.some(v => v.id === userId)) {
                             voters.push({ id: userId, name: "You" });
                         }
                     } else if (voteAction === "remove") {
-                        // Remove vote from this option
-                        voters = voters.filter(v => v.id !== userId);
+                       voters = voters.filter(v => v.id !== userId);
                     } else if (voteAction === "update") {
-                        // Add vote to this option (for single-choice polls)
+                        
                         if (!voters.some(v => v.id === userId)) {
                             voters.push({ id: userId, name: "You" });
                         }
@@ -49,7 +48,7 @@ const usePollStore = create((set, get) => ({
                     return { ...option, voters };
                 }
                 
-                // For update action, remove vote from previous option
+            
                 if (voteAction === "update" && previousOptionId && option.id === previousOptionId) {
                     return {
                         ...option,
@@ -77,7 +76,12 @@ const usePollStore = create((set, get) => ({
         } catch (error) {
             console.error('Error handling WebSocket message:', error);
         }
-    }
+    },
+
+    addPoll: (newPoll) => {
+        const { polls } = get();
+        set({ polls: [newPoll, ...polls] });
+    },
 }))
 
 export default usePollStore;

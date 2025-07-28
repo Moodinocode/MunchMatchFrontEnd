@@ -27,6 +27,17 @@ const useNotificationStore = create((set, get) => ({
             //notify();
             return { notifications: updated };
         }),
+    checkedNotifications: () =>
+        set((state) => {
+            console.log("inside")
+            const updated = state.notifications.map(not => ({
+            ...not,
+            checked: true,
+            }));
+
+            return { notifications: updated };
+        }),
+
 }));
 
 export default useNotificationStore;
