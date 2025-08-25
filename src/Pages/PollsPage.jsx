@@ -7,7 +7,7 @@ import { useEffect, useState, useContext } from 'react'
 // import polls from '../assets/pollsDummyData'
 import { getPolls, isAuther } from '../Services/pollsService'
 import { AuthContext } from '../Context/AuthContext'
-import useWebSocket, { ReadyState } from 'react-use-websocket';
+import { useWebSocket } from '../Context/WebSocketContext'
 import usePollStore from '../store/usePollStore'
 
 const PollsPage = () => {
@@ -15,30 +15,37 @@ const PollsPage = () => {
   const isMyPolls = true;
   const [isModalOpen,setIsModalOpen] = useState(false)
   const [value,setvalue] = useState(false)
+  const[onlyActive,setOnlyActive] = useState(false)
 
 
   useEffect(()=> {
-    fetchPolls()
-  },[])
+    fetchPolls(onlyActive)
+  },[onlyActive,fetchPolls])
 
 
 
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket(import.meta.env.VITE_API_SOCKURL);
-  useEffect(() => {
-    if (lastMessage !== null) {
-            console.log(lastMessage)
-      setMessageHistory((prev) => prev.concat(lastMessage));
-    }
-  }, [lastMessage]);
+  const { sendMessage } = useWebSocket();
 
-  
   return (
     <div>
       <Navbar/>
       {/* <button className='btn btn-primary' onClick={()=> setvalue(!value)}></button> */}
 
       <div className='flex justify-end px-12 py-4'>
+        <div className="flex items-center gap-2 mr-4">
+          <input 
+            type="checkbox" 
+            id="onlyActive" 
+            checked={onlyActive}
+            onChange={() => setOnlyActive(!onlyActive)}
+            className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500" 
+          />
+          <label htmlFor="onlyActive" className="text-gray-700 font-medium">
+            Only Active
+          </label>
+        </div>
+
         {isMyPolls && <CreatePollButton setIsModalOpen={setIsModalOpen}/>}
         {isModalOpen && <CreatePollModal setIsModalOpen={setIsModalOpen}/>}
       </div>

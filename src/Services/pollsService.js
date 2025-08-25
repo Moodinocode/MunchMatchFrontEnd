@@ -2,7 +2,7 @@ import axiosInstance from "../utils/axiosInstance";
 const apiurl = '/poll';
 
 
-export const getPolls = ()=> axiosInstance.get(apiurl)
+export const getPolls = (onlyActive)=> axiosInstance.get(apiurl+`?active=${onlyActive}`)
 
 export const createPoll = (poll) => axiosInstance.post(apiurl, poll)
 

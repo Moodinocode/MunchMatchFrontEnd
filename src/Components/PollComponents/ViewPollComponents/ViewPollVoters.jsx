@@ -21,7 +21,7 @@ const ViewPollVoters = ({voters = [],title, isOpen =false,setIsVotersModalOpen})
                 {/* <div className="avatar avatar-online"> */}
                 <div className="avatar">
                   <div className="w-8 rounded-full">
-                    <img src={voter.profileImageUrl || "https://img.daisyui.com/images/profile/demo/gordon@192.webp"} alt={voter.name} />
+                    <img src={voter.profileImageUrl || "https://img.daisyui.com/images/profile/demo/gordon@192.webp"} alt={voter.username} />
                   </div>
                 </div>
                 <p>{voter.username}</p>

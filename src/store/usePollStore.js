@@ -6,11 +6,11 @@ const usePollStore = create((set, get) => ({
     loading: false,
     error: null,
 
-    fetchPolls: async (token) => {
+    fetchPolls: async (onlyActive) => {
         set({loading: true, error: null});
 
         try {
-            const res = await getPolls(token);
+            const res = await getPolls(onlyActive);
             set({polls: res.data.content, loading: false})
         } catch (err) {
             console.log("error fetching polls:", err)

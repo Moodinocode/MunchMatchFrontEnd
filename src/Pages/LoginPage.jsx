@@ -1,10 +1,10 @@
-import React from 'react'
 import UsernameInput from '../Components/AuthComponents/UsernameInput'
 import PasswordInput from '../Components/AuthComponents/PasswordInput'
 import {Link, useNavigate} from 'react-router-dom'
-import { useState } from 'react'
+import { useState,useContext } from 'react'
 import OAuthButton from '../Components/AuthComponents/OAuthButton'
 import { login } from '../Services/authService'
+import { AuthContext } from '../Context/AuthContext'
 
 const LoginPage = () => {
   const [userDetails, setUserDetails] = useState({
@@ -12,6 +12,7 @@ const LoginPage = () => {
     password: ''
   });
   const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext);
 
 
 
@@ -20,11 +21,15 @@ const LoginPage = () => {
     // console.log('Username:', userDetails.username);
     // console.log('Password:', userDetails.password);
     login(userDetails).then((response)=>{
-      const { token, ...userData } = response.data;
+      const { token,twilioToken, ...userData } = response.data;
       sessionStorage.setItem("token", `${token}`);
+      sessionStorage.setItem("twilioToken", `${twilioToken}`);
       sessionStorage.setItem("user", JSON.stringify(userData));
 
-      navigate('/')
+      console.log("logging in")
+       setUser(userData);
+      // setTimeout(1000)
+      navigate('/polls')
     }).catch((error) => console.log(error))
 
   }

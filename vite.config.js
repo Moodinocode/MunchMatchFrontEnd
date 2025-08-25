@@ -15,7 +15,7 @@ export default defineConfig({
   optimizeDeps: {
     esbuildOptions: {
       define: {
-        global: 'globalThis', // ✅ also define it for esbuild
+        global: 'globalThis', 
       },
       plugins: [
         NodeGlobalsPolyfillPlugin({
@@ -34,5 +34,13 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    // proxy: {
+    //   '/ws': {
+    //     target: 'https://50777c59b0f7.ngrok-free.app',
+    //     changeOrigin: true,
+    //     secure: false,
+    //     ws: true,
+    //   },
+    // }
   },
 })

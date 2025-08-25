@@ -25,24 +25,17 @@ const CreatePollForm = ({setIsModalOpen}) => {
   
 
   const now = new Date();
-  let combinedDateTime;
 
-  const hasDate = !!pollDetails.pollDate;
-  const hasTime = !!pollDetails.pollTime;
+  const datePart = pollDetails.pollDate || now.toISOString().split('T')[0];
+  const timePart = pollDetails.pollTime || new Date(now.getTime() + 60 * 60 * 1000).toTimeString().split(' ')[0].slice(0, 5); // "HH:mm"
+  const combinedDateTime = new Date(`${datePart}T${timePart}:00`);
+  console.log("Local end time:", combinedDateTime.toLocaleString());
 
-  if (!hasDate && !hasTime) {
-    // Neither set: use current time + 1 hour
-    combinedDateTime = new Date(now.getTime() + 60 * 60 * 1000);
-  } else {
-    // Either date or time is set: use provided or fallback
-    const datePart = pollDetails.pollDate || now.toISOString().split("T")[0];
-    const timePart = pollDetails.pollTime || "23:59";
-    combinedDateTime = new Date(`${datePart}T${timePart}`);
-  }
-
+const timezoneOffsetMs = combinedDateTime.getTimezoneOffset() * 60 * 1000;
+const localTimeAsUtc = new Date(combinedDateTime.getTime() - timezoneOffsetMs);
   const finalPayload = {
     allowMultipleVotes: pollDetails.allowMultipleVotes,
-    endDate: combinedDateTime.toISOString(),
+    endDate: localTimeAsUtc.toISOString(),
     optionIds: pollDetails.optionIds,
     title: pollDetails.title,
     visibleUserIds: pollDetails.visibleUserIds
@@ -53,7 +46,7 @@ const CreatePollForm = ({setIsModalOpen}) => {
   console.log(finalPayload)
 
   createPoll(finalPayload)
-    .then((response) => console.log(response, " from http"))
+    .then((response) =>addPoll(response.data))
     .catch((error) => console.log(error));
    setIsModalOpen(false)
 };
@@ -135,7 +128,7 @@ const CreatePollForm = ({setIsModalOpen}) => {
         <div className="w-4/12">
 
 
-          <button onClick={(e) => handleSubmit(e)} className="btn btn-success w-full mt-6 shadow-md hover:scale-105 transition-transform duration-200">
+          <button onClick={(e) => handleSubmit(e)} disabled={pollDetails.optionIds.length<1? "disabled":""} className='btn btn-success w-full mt-6 shadow-md hover:scale-105 transition-transform duration-200'>
             Add
           </button>
         </div>

@@ -4,15 +4,13 @@ const apiUrl = '/option';
 
 export const getOptions = () => axiosInstance.get(apiUrl)
 
-export const createOption = (requestBody) => axiosInstance.post(apiUrl,requestBody
-)
+export const createOption = (requestBody) => axiosInstance.post(apiUrl,requestBody)
 
 export const updateOption = (requestBody,id) => axiosInstance.put(apiUrl+`/${id}`,
     {
         requestBody
     }
 )
-export const deleteOption = (token,optionId) => axiosInstance.post(apiUrl+`/${optionId}`
-)
+export const deleteOption = (token,optionId) => axiosInstance.post(apiUrl+`/${optionId}`)
 
 

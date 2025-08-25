@@ -4,12 +4,12 @@ import { logout } from '../Services/authService'
 import ThemeToggle from './ThemeToggle'
 import NotificationDropDown from './NotificationDropDown';
 import useNotificationStore from '../store/useNotificationStore'
-
+import { useWebSocket } from '../Context/WebSocketContext';
 
 
 const Navbar = () => {
   const {notifications, loading,error, fetchNotifications} = useNotificationStore();
-
+  const {disconnect} = useWebSocket()
   useEffect(()=> {
     fetchNotifications()
   },[])
@@ -38,14 +38,14 @@ const Navbar = () => {
         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-5 mt-3 w-52 p-2 shadow">
         <li><NavLink to='/'>Restaurants</NavLink></li>
         <li><NavLink to='/polls'>Polls</NavLink></li>
-        {/* <li><a>Polls</a></li> */}
-        {/* <li>
-          <a>Polls</a>
+    
+        <li>
+          <a>Contact</a>
           <ul className="p-2 menuDropDownZ">
-            <li><NavLink to='/polls'>Todays</NavLink></li>
-            <li><NavLink to='/mypolls'>My Polls</NavLink></li>
+            <li><NavLink to='/chat'>Chat</NavLink></li>
+            <li><NavLink to='/MakeCall2'>Calling</NavLink></li>
           </ul>
-        </li> */}
+        </li>
         
       </ul>
     </div>
@@ -55,16 +55,16 @@ const Navbar = () => {
     <ul className="menu menu-horizontal px-1">
       <li><NavLink to='/'>Restaurants</NavLink></li>
       <li><NavLink to='/polls'>Polls</NavLink></li>
-       {/* <li><a>Polls</a></li> */}
-      {/* <li>
+       
+      <li>
         <details>
-          <summary>Polls</summary>
+          <summary>Contact</summary>
           <ul className="p-2 w-24 z-1">
-            <li><NavLink to='/polls'>Todays</NavLink></li>
-            <li><NavLink to='/mypolls'>My Polls</NavLink></li>
+            <li><NavLink to='/chat'>Chat</NavLink></li>
+            <li><NavLink to='/MakeCall2'>Calling</NavLink></li>
           </ul>
         </details>
-      </li> */}
+      </li>
      
     </ul>
   </div>
@@ -96,9 +96,12 @@ const Navbar = () => {
     <Link
       to='/login'
       onClick={(e) => {
-        sessionStorage.clear()
+        
         logout().then((response) => {
           console.log(response.data)
+          
+          sessionStorage.clear()
+          disconnect()
         }).catch(error => console.log(error))
       }}
     >
