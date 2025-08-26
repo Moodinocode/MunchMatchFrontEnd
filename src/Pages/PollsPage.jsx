@@ -9,6 +9,7 @@ import { getPolls, isAuther } from '../Services/pollsService'
 import { AuthContext } from '../Context/AuthContext'
 import { useWebSocket } from '../Context/WebSocketContext'
 import usePollStore from '../store/usePollStore'
+import Spinner from '../Components/Spinner'
 
 const PollsPage = () => {
   const {polls, loading,error, fetchPolls} = usePollStore();
@@ -31,8 +32,14 @@ const PollsPage = () => {
     <div>
       <Navbar/>
       {/* <button className='btn btn-primary' onClick={()=> setvalue(!value)}></button> */}
-
+          {loading ? (
+                <div className="flex justify-center items-center h-full p-4">
+               <Spinner />
+               </div>
+              ):(
+                <>
       <div className='flex justify-end px-12 py-4'>
+
         <div className="flex items-center gap-2 mr-4">
           <input 
             type="checkbox" 
@@ -50,18 +57,16 @@ const PollsPage = () => {
         {isModalOpen && <CreatePollModal setIsModalOpen={setIsModalOpen}/>}
       </div>
       <div className='flex flex-wrap gap-6 justify-center'>
-        { loading ? <p>Loading polls...</p>:
-          error ? <p>Error: {error}</p> :
-          <>
+
           {polls.map((poll) => {
             
             //console.log(poll);
             return <PollCard sendMessage={sendMessage}  key={poll.id} poll={poll}  />;
           })}
-          </>
-        
-      }
+
       </div>
+      </>
+  )}
       
       
     </div>

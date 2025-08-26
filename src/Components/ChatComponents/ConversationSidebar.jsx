@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import  useConversationStore  from '../../store/useConversationStore';
 import CreateConversationModal from './CreateConversationModal';
+import Spinner from '../Spinner';
 
 const ConversationSidebar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -9,7 +10,7 @@ const ConversationSidebar = () => {
     activeConversation,
     setActiveConversation,
     leaveConversation,
-    getConversations,
+    loading,
   } = useConversationStore();
   
   // Sidebar toggle
@@ -85,6 +86,11 @@ const ConversationSidebar = () => {
 
             {/* Conversation List - with proper scrolling */}
             <div className="flex-1 overflow-y-auto">
+              {loading && (
+                <div className="flex justify-center items-center h-full p-4">
+               <Spinner />
+               </div>
+              )}
               {filteredConversations.map((convData) => (
                 <div 
                   key={convData.sid}

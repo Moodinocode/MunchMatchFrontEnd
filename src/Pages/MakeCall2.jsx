@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Device } from "@twilio/voice-sdk";
 import Navbar from "../Components/Navbar";
 
@@ -9,6 +9,11 @@ function MakeCall2() {
   const [incomingConnection, setIncomingConnection] = useState(null);
   const connectionRef = useRef(null);
   const ringAudio = useRef(new Audio("/ringtone.mp3"));
+
+
+  useEffect(() => {
+    setupDevice();
+  }, []);
 
   const setupDevice = () => {
     try {
@@ -47,7 +52,7 @@ function MakeCall2() {
     }
   };
 
-  const makeCall = () => {
+  const makeCall = async () => {
     const user = JSON.parse(sessionStorage.getItem("user"));
     const identity = user?.username;
 
@@ -64,7 +69,7 @@ function MakeCall2() {
     ringAudio.current.loop = true;
     ringAudio.current.play().catch(() => {});
 
-    const connection = device.connect({ params: { to: callTo, from: identity } });
+    const connection = await device.connect({ params: { to: callTo, from: identity } });
     connectionRef.current = connection;
 
     connection.on("stateChange", () => {
@@ -120,13 +125,6 @@ function MakeCall2() {
         <div className="card-body">
           <h2 className="card-title text-center text-2xl font-bold">📱 Twilio Voice</h2>
           <p className="text-center text-sm opacity-70">{status}</p>
-
-          <button
-            className="btn btn-primary w-full mt-3"
-            onClick={setupDevice}
-          >
-            Login / Setup Device
-          </button>
 
           <div className="mt-4">
             <input
