@@ -73,7 +73,7 @@ const CoversationChatInterface = () => {
             </h3>
             <p className="text-sm text-base-content/60">
               {otherParticipants.length > 0 
-                ? `${otherParticipants.length} participant${otherParticipants.length > 1 ? 's' : ''}: ${getParticipantNames()}`
+                ? `${getParticipantNames()}`
                 : 'No other participants'
               }
             </p>

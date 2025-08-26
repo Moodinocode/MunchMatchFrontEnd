@@ -13,7 +13,7 @@ const TwilioChatPage = () => {
   return (
     <div className='flex flex-col h-screen'>
         <Navbar/>
-        <div className='flex overflow-hidden border-t-2 border-gray-400'>
+        <div className='flex overflow-hidden border-t-2 border-gray-400 h-screen'>
           <ConversationSidebar />
           <CoversationChatInterface/>
         </div>

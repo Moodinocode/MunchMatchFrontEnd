@@ -99,7 +99,7 @@ const MultiSelectFilter = ({ setPollDetails}) => {
           {filteredOptions.length ? (
             filteredOptions.map((option) => (
               <div
-                key={option.title}
+                key={option.id}
                 className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-all ${
                   selectedOptions.length >= maxSelected 
                     ? 'opacity-50 cursor-not-allowed' 

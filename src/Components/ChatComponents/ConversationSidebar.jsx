@@ -95,7 +95,7 @@ const ConversationSidebar = () => {
                 <div 
                   key={convData.sid}
                   className={`p-3 border-b cursor-pointer hover:bg-base-200 ${
-                    activeConversation?.sid === convData.conversationSid ? 'bg-primary/10' : ''
+                    activeConversation?.conversation.sid === convData.conversation.sid ? 'bg-primary/10' : ''
                   }`}
                   onClick={() => setActiveConversation(convData)}
                 >

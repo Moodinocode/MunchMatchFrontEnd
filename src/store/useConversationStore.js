@@ -98,7 +98,10 @@ setTypingEnded: (conversationSid, participant) => {
       conversation: { sid: conv.sid, friendlyName: conv.friendlyName },
       unreadCount: await conv.getUnreadMessagesCount(),
       participants,
-      lastActivity: conv.lastMessage?.dateCreated?.getTime() || Date.now(),
+      lastActivity: messagesPaginator.items.length > 0
+  ? messagesPaginator.items[messagesPaginator.items.length - 1].dateCreated.getTime()
+  : 0, // or keep the previous lastActivity instead of defaulting to now
+
       messages: messagesPaginator.items.map((m) => ({
         sid: m.sid,
         author: m.author,
@@ -239,6 +242,15 @@ console.log("Active conversation set:", builtconversation);
 
 builtconversation.unreadCount = 0;
 set({ activeConversation: builtconversation });
+set((state) => ({
+  conversations: state.conversations.map((c) =>
+    c.conversation.sid === builtconversation.conversation.sid
+      ? { ...c, ...builtconversation, lastActivity: c.lastActivity } // keep old lastActivity
+      : c
+  ),
+}));
+
+
 
 // Attach typing listeners to the Twilio conversation object
 conversation.on('typingStarted', function(participant) {
@@ -272,6 +284,25 @@ conversation.on('typingEnded', function(participant) {
     console.error("Error fetching conversation:", error);
   }
 },
+
+leaveConversation: async (sid) => {
+    const { client, activeConversation, conversations } = get();
+    if (!client) return;
+    try {
+      const conv = await client.getConversationBySid(sid);
+      await conv.leave();
+      set({
+        conversations: conversations.filter((c) => c.conversation.sid !== sid),
+        activeConversation:
+          activeConversation?.conversation.sid === sid
+            ? null
+            : activeConversation,
+      });
+    } catch (error) {
+      console.error("Error leaving conversation:", error);
+    }
+  },
+  
 
 
 

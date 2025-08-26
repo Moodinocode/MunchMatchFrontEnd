@@ -44,6 +44,7 @@ function MakeCall2() {
         setIncomingConnection(connection);
       });
 
+
       twilioDevice.register();
       setDevice(twilioDevice);
     } catch (e) {

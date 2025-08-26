@@ -11,6 +11,7 @@ const usePollStore = create((set, get) => ({
 
         try {
             const res = await getPolls(onlyActive);
+            console.log(`Fetched polls-${onlyActive}:`, res.data);
             set({polls: res.data.content, loading: false})
         } catch (err) {
             console.log("error fetching polls:", err)
