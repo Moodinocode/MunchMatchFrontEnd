@@ -1,8 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 
 export default defineConfig({
   plugins: [
@@ -10,26 +8,34 @@ export default defineConfig({
     tailwindcss()
   ],
   define: {
-    global: 'globalThis', // ✅ fix ReferenceError: global is not defined
+    global: 'globalThis',
+    'process.env': {},
   },
   optimizeDeps: {
+    include: ['buffer', 'process'],
     esbuildOptions: {
       define: {
-        global: 'globalThis', 
+        global: 'globalThis',
       },
-      plugins: [
-        NodeGlobalsPolyfillPlugin({
-          buffer: true,
-          process: true,
-        }),
-      ],
     },
   },
   build: {
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
     rollupOptions: {
-      plugins: [
-        rollupNodePolyFill() // ✅ polyfill node core modules
-      ],
+      external: [],
+      output: {
+        globals: {}
+      }
+    },
+  },
+  resolve: {
+    alias: {
+      buffer: 'buffer',
+      process: 'process/browser',
+      stream: 'stream-browserify',
+      util: 'util',
     },
   },
   server: {
