@@ -96,6 +96,10 @@ const AddRestaurantForm = () => {
         tags: [],
         images: []
       });
+
+      location.reload();
+
+
       
      
       
@@ -105,6 +109,8 @@ const AddRestaurantForm = () => {
     } finally {
       setIsLoading(false);
     }
+
+
   };
 
   return (

@@ -10,6 +10,7 @@ import { AuthContext } from '../Context/AuthContext'
 import { useWebSocket } from '../Context/WebSocketContext'
 import usePollStore from '../store/usePollStore'
 import Spinner from '../Components/Spinner'
+import SlidingPagination from '../Components/SlidingPagination'
 
 const PollsPage = () => {
   const {polls, loading,error, fetchPolls} = usePollStore();
@@ -18,10 +19,17 @@ const PollsPage = () => {
   const [value,setvalue] = useState(false)
   const[onlyActive,setOnlyActive] = useState(false)
 
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    
+  };
+
 
   useEffect(()=> {
-    fetchPolls(onlyActive)
-  },[onlyActive,fetchPolls])
+    fetchPolls(onlyActive,currentPage-1);
+  },[onlyActive,fetchPolls,currentPage])
 
 
 
@@ -64,7 +72,13 @@ const PollsPage = () => {
             return <PollCard sendMessage={sendMessage}  key={poll.id} poll={poll}  />;
           })}
 
+
       </div>
+                <SlidingPagination
+      currentPage={currentPage}
+      totalPages={50}
+      onPageChange={handlePageChange}
+    />
       </>
   )}
       

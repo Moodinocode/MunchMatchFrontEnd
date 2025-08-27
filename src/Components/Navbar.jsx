@@ -5,10 +5,13 @@ import ThemeToggle from './ThemeToggle'
 import NotificationDropDown from './NotificationDropDown';
 import useNotificationStore from '../store/useNotificationStore'
 import { useWebSocket } from '../Context/WebSocketContext';
+import { AuthContext } from '../Context/AuthContext'
+import { useContext } from 'react';
 
 
 const Navbar = () => {
   const {notifications, loading,error, fetchNotifications} = useNotificationStore();
+  const {user} = useContext(AuthContext);
   const {disconnect} = useWebSocket()
   useEffect(()=> {
     fetchNotifications()
@@ -78,7 +81,7 @@ const Navbar = () => {
         <div className="w-10 rounded-full">
           <img
             alt="Tailwind CSS Navbar component"
-            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+            src={user.profileImageUrl} />
         </div>
       </div>
       <ul
@@ -102,6 +105,7 @@ const Navbar = () => {
           
           sessionStorage.clear()
           disconnect()
+
         }).catch(error => console.log(error))
       }}
     >
