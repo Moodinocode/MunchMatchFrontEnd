@@ -16,7 +16,7 @@
     "@tailwindcss/vite": "^4.1.11",
     "@twilio/conversations": "^2.6.3",
     "@twilio/voice-sdk": "^2.15.0",
-    "axios": "^1.10.0",
+    "axios": "^1.11.0",
     "daisyui": "^5.0.46",
     "git": "^0.1.5",
     "lucide-react": "^0.525.0",
