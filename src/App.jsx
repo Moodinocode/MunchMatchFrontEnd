@@ -11,7 +11,6 @@ import SettingsPage from "./Pages/SettingsPage";
 import { WebSocketProvider } from './Context/WebSocketContext';
 import { ToastContainer } from 'react-toastify';
 import { useContext } from 'react';
-import MakeCallPage from "./Pages/makeCallPage";
 import MakeCall2 from "./Pages/MakeCall2";
 import TwilioChatPage from "./Pages/TwilioChatPage";
 
@@ -71,14 +70,7 @@ function App() {
             </ProtectedRoute>
           } 
         />
-                <Route 
-          path="makecall" 
-          element={
-            <ProtectedRoute>
-              <MakeCallPage />
-            </ProtectedRoute>
-          } 
-        />
+
                         <Route 
           path="MakeCall2" 
           element={
