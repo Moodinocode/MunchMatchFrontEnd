@@ -81,7 +81,7 @@ const Navbar = () => {
         <div className="w-10 rounded-full">
           <img
             alt="pfp"
-            src={user.profileImageUrl} />
+            src={user.profileImageUrl ||`https://wallpapers.com/images/hd/blank-default-pfp-wue0zko1dfxs9z2c.jpg`} />
         </div>
       </div>
       <ul
