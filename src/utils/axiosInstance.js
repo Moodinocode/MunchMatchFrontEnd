@@ -26,6 +26,32 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-//TODO SHOW TOAST ON ERROR also using interceptors on response
-//LOGOUT ON 401
+
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response) {
+      console.error('Error Response:', error.response);
+
+      // Example: Show toast
+      // toast.error(error.response.data.message || "Something went wrong");
+
+      if (error.response.status === 401) {
+        sessionStorage.clear('token');
+        window.location.href = '/login'; 
+      }
+    } else {
+      console.error('Network or other error:', error.message);
+      // toast.error("Network error, please check your connection.");
+    }
+    return Promise.reject(error);
+  }
+);
+
+
+
+
+
 export default axiosInstance;
