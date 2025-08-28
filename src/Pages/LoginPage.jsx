@@ -30,7 +30,11 @@ const LoginPage = () => {
        setUser(userData);
       // setTimeout(1000)
       navigate('/polls')
-    }).catch((error) => console.log(error))
+    }).catch((error) => {
+      SessionStorage.clear()
+      console.log("Login error:", error)
+    }
+    )
 
   }
 

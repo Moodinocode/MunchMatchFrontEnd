@@ -1,6 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route, Navigate } from "react-router-dom";
 import { MsalProvider } from "@azure/msal-react";
-import { PublicClientApplication } from "@azure/msal-browser";
+import { PublicClientApplication, SessionStorage } from "@azure/msal-browser";
 import { msalConfig } from "./Configurations/authConfig";
 import LoginPage from "./Pages/LoginPage";
 import RegistrationPage from "./Pages/RegistrationPage";
@@ -25,6 +25,7 @@ const ProtectedRoute = ({ children }) => {
 
   if (!user) {
     return <Navigate to="/login" replace />;
+   
   }
 
   return <WebSocketProvider>{children}</WebSocketProvider>;

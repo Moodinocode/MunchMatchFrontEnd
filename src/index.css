@@ -1,2 +1,17 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+
+/* Remove native styling */
+input[type="time"] {
+  appearance: none;
+  -webkit-appearance: none; /* Chrome/Safari */
+  -moz-appearance: none;    /* Firefox */
+  position: relative;
+}
+
+/* Hide the browser’s clock/dropdown icon */
+input[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
+}

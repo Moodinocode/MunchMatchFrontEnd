@@ -127,16 +127,17 @@ const CreatePollForm = ({setIsModalOpen}) => {
       {/* Row with Time, optional Date, and Toggle */}
       <div className="flex flex-col md:flex-row items-start gap-3 mb-2 ">
         {/* Time input */}
-        <label className="input input-sm input-bordered flex items-center w-[120px] cursor-pointer px-2">
-          <input
-            type="time"
-            value={pollDetails.pollTime}
-            onChange={handleTimeChange}
-            min={showDate ? undefined : currentTime}
-            className="bg-transparent outline-none text-sm cursor-pointer"
-            required
-          />
-        </label>
+<label className="input input-sm input-bordered flex items-center w-[120px] cursor-pointer px-2">
+  <input
+    type="time"
+    value={pollDetails.pollTime}
+    onChange={handleTimeChange}
+    min={showDate ? undefined : currentTime}
+    className="bg-transparent outline-none text-sm cursor-pointer w-full"
+    required
+  />
+</label>
+
 
         {/* Conditionally show date */}
         {showDate && (
