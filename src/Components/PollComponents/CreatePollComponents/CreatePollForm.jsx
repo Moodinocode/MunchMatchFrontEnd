@@ -125,7 +125,7 @@ const CreatePollForm = ({setIsModalOpen}) => {
       </div>
 
       {/* Row with Time, optional Date, and Toggle */}
-      <div className="flex items-center gap-3 mb-2">
+      <div className="flex flex-col md:flex-row items-start gap-3 mb-2 ">
         {/* Time input */}
         <label className="input input-sm input-bordered flex items-center w-fit cursor-pointer px-2">
           <input
@@ -188,7 +188,7 @@ const CreatePollForm = ({setIsModalOpen}) => {
           <button 
             onClick={(e) => handleSubmit(e)} 
             disabled={pollDetails.optionIds.length < 1 || dateTimeError} 
-            className='btn btn-success w-full mt-6 shadow-md hover:scale-105 transition-transform duration-200'
+            className='btn btn-success w-full mt-6 shadow-md hover:scale-105 transition-transform duration-200 mb-12 md:mb-0'
           >
             Add
           </button>
