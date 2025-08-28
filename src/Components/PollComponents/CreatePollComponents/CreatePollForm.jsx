@@ -127,7 +127,7 @@ const CreatePollForm = ({setIsModalOpen}) => {
       {/* Row with Time, optional Date, and Toggle */}
       <div className="flex flex-col md:flex-row items-start gap-3 mb-2 ">
         {/* Time input */}
-        <label className="input input-sm input-bordered flex items-center w-fit cursor-pointer px-2">
+        <label className="input input-sm input-bordered flex items-center w-[120px] cursor-pointer px-2">
           <input
             type="time"
             value={pollDetails.pollTime}
